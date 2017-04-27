@@ -27,4 +27,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+
+    //阿里巴巴 多功能布局(针对recyclerview的布局管理扩展)
+    compile ('com.alibaba.android:vlayout:1.0.4@aar') {
+        transitive = true
+    }
 }

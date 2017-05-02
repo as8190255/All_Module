@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.jc.allmoduledemo">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".widget.recyclerview.RecyclerviewActivity" />
-        <activity android:name=".widget.vlayout.VLayoutActivity"></activity>
+        <activity android:name=".widget.vlayout.VLayoutActivity" />
+        <activity android:name=".widget.vlayout.TmallIndexActivity"></activity>
     </application>
 
 </manifest>

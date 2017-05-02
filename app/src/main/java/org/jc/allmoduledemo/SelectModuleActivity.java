@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import org.jc.allmoduledemo.widget.recyclerview.RecyclerviewActivity;
+import org.jc.allmoduledemo.widget.vlayout.TmallIndexActivity;
 import org.jc.allmoduledemo.widget.vlayout.VLayoutActivity;
 
 /**
@@ -17,6 +18,6 @@ public class SelectModuleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_module);
 
-        startActivity(new Intent(this, VLayoutActivity.class));
+        startActivity(new Intent(this, TmallIndexActivity.class));
     }
 }

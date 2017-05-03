@@ -2,10 +2,13 @@ package org.jc.allmoduledemo.widget.vlayout;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +18,6 @@ import android.widget.TextView;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.RecyclablePagerAdapter;
-import com.alibaba.android.vlayout.VirtualLayoutAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
@@ -35,6 +37,13 @@ public class TmallIndexActivity extends AppCompatActivity {
     VirtualLayoutManager layoutManager;
     DelegateAdapter delegateAdapter;//总适配器（也可以自定义适配器VirtualLayoutAdapter）
     List<DelegateAdapter.Adapter> adapters;//适配器列表（放置不同布局）
+
+
+    String [] ims = new String[]{
+            "http://www.005.tv/uploads/allimg/160712/22-160G2102T3c7.jpg",
+            "http://www.005.tv/uploads/allimg/160830/22-160S0111250139.jpg",
+            "https://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b151f8198618367a40893abc2d738bd4b31ce54b.jpg",
+            "https://gss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/d000baa1cd11728b40cb0096cefcc3cec2fd2c9b.jpg"};
 
 
     @Override
@@ -59,7 +68,7 @@ public class TmallIndexActivity extends AppCompatActivity {
 
         //创建banner布局
         if (true){
-            adapters.add(new BannerAdapter(this, viewPool));
+            adapters.add(new BannerAdapter(this, viewPool, ims));
         }
         //创建GridLayout 分类布局
         if (true){
@@ -73,6 +82,7 @@ public class TmallIndexActivity extends AppCompatActivity {
 
         //最终设置
         delegateAdapter.setAdapters(adapters);
+
     }
     //Banner顶部数据
     static class BannerAdapter extends DelegateAdapter.Adapter<BannerViewHolder>{
@@ -80,12 +90,17 @@ public class TmallIndexActivity extends AppCompatActivity {
         private VirtualLayoutManager.LayoutParams mLayoutParams;
         private LayoutHelper mLayoutHelper;
         RecyclerView.RecycledViewPool viewPool;
-        public BannerAdapter(Context mContext, RecyclerView.RecycledViewPool viewPool) {
+        Handler mHandler = new Handler();
+        Runnable runnable;
+        String [] ims;
+
+        public BannerAdapter(Context mContext, RecyclerView.RecycledViewPool viewPool, String [] ims) {
             this.viewPool = viewPool;
             this.mContext = mContext;
             this.mLayoutParams = new VirtualLayoutManager.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, 300);
             this.mLayoutHelper = new LinearLayoutHelper();
+            this.ims = ims;
         }
 
         @Override
@@ -100,14 +115,46 @@ public class TmallIndexActivity extends AppCompatActivity {
                         R.layout.item_banner, parent, false));
             }else {
                 return new BannerViewHolder(LayoutInflater.from(mContext).inflate(
-                        R.layout.item_recyclerview, parent, false));
+                        R.layout.item_banner_item, parent, false));
             }
         }
 
         @Override
-        public void onBindViewHolder(BannerViewHolder holder, int position) {
+        public void onBindViewHolder(final BannerViewHolder holder, int position) {
             holder.itemView.setLayoutParams(mLayoutParams);
-            holder.mViewpager.setAdapter(new ThisPagerAdapter(this, viewPool));
+            holder.mViewpager.setAdapter(new ThisPagerAdapter(mContext, this, viewPool, ims));
+            holder.mViewpager.addOnPageChangeListener(new BannerPageChangeListener(holder.mViewpager, ims));
+            holder.mViewpager.setCurrentItem(1, false);
+
+            //该种方式可能会出现问题（占用过多主线程时间）
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    int num = holder.mViewpager.getCurrentItem();
+                        num++;
+                        holder.mViewpager.setCurrentItem(num, true);
+                        Log.i("anan", "viewpager:"+ num);
+                    mHandler.postDelayed(runnable, 5000);
+                }
+            };
+            mHandler.postDelayed(runnable, 5000);
+
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    while (true){
+//                        try {
+//                            Thread.sleep(5000);
+//                        } catch (InterruptedException e) {
+//                        }
+//                        int num = holder.mViewpager.getCurrentItem();
+//                        num++;
+//                        holder.mViewpager.setCurrentItem(num, true);
+//                        Log.i("anan", "viewpager:"+ num);
+//
+//                    }
+//                }
+//            }).start();
         }
 
         @Override
@@ -120,22 +167,64 @@ public class TmallIndexActivity extends AppCompatActivity {
             return 1;
         }
     }
+
+    //Viewpager无限循环监听
+    static class BannerPageChangeListener implements ViewPager.OnPageChangeListener {
+        ViewPager mViewpager;
+        String [] ims;
+        int mCount;//实际轮播图数量
+        public BannerPageChangeListener(ViewPager mViewpager, String [] ims) {
+            this.mViewpager = mViewpager;
+            this.ims = ims;
+            this.mCount = ims.length;
+        }
+        @Override
+        public void onPageSelected(int position) {
+        }
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (state != 0) return;//当state为0时说明已经结束滑动
+            Log.i("anan", mViewpager.getCurrentItem() + " ...0");
+            if (mViewpager.getCurrentItem() == 0){//到头了
+                Log.i("anan", mViewpager.getCurrentItem() + "...1");
+                mViewpager.setCurrentItem(mCount, false);
+            }else if (mViewpager.getCurrentItem() == (mCount + 1)){//到尾了
+                Log.i("anan", mViewpager.getCurrentItem() + "...2");
+                mViewpager.setCurrentItem(1, false);
+            }
+        }
+    }
+
     //Viewpager适配器
     static class ThisPagerAdapter extends RecyclablePagerAdapter<BannerViewHolder>{
-        public ThisPagerAdapter(RecyclerView.Adapter<BannerViewHolder> adapter, RecyclerView.RecycledViewPool pool) {
+        String [] ims;
+        Context mContext;
+        public ThisPagerAdapter(Context mContext, RecyclerView.Adapter<BannerViewHolder> adapter,
+                                RecyclerView.RecycledViewPool pool, String [] ims) {
             super(adapter, pool);
+            this.mContext = mContext;
+            this.ims = ims;
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return ims.length + 2;
         }
 
         @Override
         public void onBindViewHolder(BannerViewHolder viewHolder, int position) {
             viewHolder.itemView.setLayoutParams(new VirtualLayoutManager.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, 300));
-            viewHolder.tv_title.setText("1231");
+            if (position == 0){
+                Glide.with(mContext).load(ims[ims.length - 1]).into(viewHolder.im_banner_item);
+            }else if (position == (ims.length + 1)){
+                Glide.with(mContext).load(ims[0]).into(viewHolder.im_banner_item);
+            }else {
+                Glide.with(mContext).load(ims[position - 1]).into(viewHolder.im_banner_item);
+            }
         }
 
         @Override
@@ -171,6 +260,7 @@ public class TmallIndexActivity extends AppCompatActivity {
 
         @Override
         public ThisViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//            Log.i("anan","onCreateViewHolder");
             return new ThisViewHolder(LayoutInflater.from(mContext).inflate(
                     R.layout.item_grid, parent, false));
         }
@@ -200,11 +290,11 @@ public class TmallIndexActivity extends AppCompatActivity {
 
     static class BannerViewHolder extends RecyclerView.ViewHolder{
         ViewPager mViewpager;
-        TextView tv_title;
+        ImageView im_banner_item;
         public BannerViewHolder(View itemView) {
             super(itemView);
             mViewpager = (ViewPager) itemView.findViewById(R.id.mViewpager);
-            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
+            im_banner_item = (ImageView) itemView.findViewById(R.id.im_banner_item);
         }
     }
 

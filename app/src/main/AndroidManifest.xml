@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.jc.allmoduledemo">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".widget.recyclerview.RecyclerviewActivity" />
         <activity android:name=".widget.vlayout.VLayoutActivity" />
-        <activity android:name=".widget.vlayout.TmallIndexActivity"></activity>
+        <activity android:name=".widget.vlayout.TmallIndexActivity" />
+        <activity android:name=".framework.view.ButterknifeActivity"></activity>
     </application>
 
 </manifest>

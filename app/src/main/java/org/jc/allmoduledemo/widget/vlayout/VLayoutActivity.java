@@ -24,6 +24,7 @@ import java.util.List;
 
 /**
  * 基础多布局嵌套(多用于首页)
+ * https://github.com/alibaba/vlayout
  */
 public class VLayoutActivity extends AppCompatActivity {
 

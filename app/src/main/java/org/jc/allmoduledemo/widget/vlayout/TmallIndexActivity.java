@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 
 import org.jc.allmoduledemo.R;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,7 +54,6 @@ public class TmallIndexActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.mRecyclerView);
         layoutManager = new VirtualLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-
         //设置缓存
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
         mRecyclerView.setRecycledViewPool(viewPool);
@@ -126,7 +126,7 @@ public class TmallIndexActivity extends AppCompatActivity {
             holder.mViewpager.addOnPageChangeListener(new BannerPageChangeListener(holder.mViewpager, ims));
             holder.mViewpager.setCurrentItem(1, false);
 
-            //该种方式可能会出现问题（占用过多主线程时间）
+
             runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -137,24 +137,8 @@ public class TmallIndexActivity extends AppCompatActivity {
                     mHandler.postDelayed(runnable, 5000);
                 }
             };
-            mHandler.postDelayed(runnable, 5000);
+//            mHandler.postDelayed(runnable, 5000);
 
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    while (true){
-//                        try {
-//                            Thread.sleep(5000);
-//                        } catch (InterruptedException e) {
-//                        }
-//                        int num = holder.mViewpager.getCurrentItem();
-//                        num++;
-//                        holder.mViewpager.setCurrentItem(num, true);
-//                        Log.i("anan", "viewpager:"+ num);
-//
-//                    }
-//                }
-//            }).start();
         }
 
         @Override
@@ -183,18 +167,31 @@ public class TmallIndexActivity extends AppCompatActivity {
         }
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            if (positionOffset == 0){
+//                if (position == 0){
+//                    mViewpager.setCurrentItem(mCount, false);
+//                }else if (position == (mCount + 1)){
+//                    mViewpager.setCurrentItem(1, false);
+//                }
+//            }
+
         }
         @Override
-        public void onPageScrollStateChanged(int state) {
-            if (state != 0) return;//当state为0时说明已经结束滑动
-            Log.i("anan", mViewpager.getCurrentItem() + " ...0");
-            if (mViewpager.getCurrentItem() == 0){//到头了
-                Log.i("anan", mViewpager.getCurrentItem() + "...1");
-                mViewpager.setCurrentItem(mCount, false);
-            }else if (mViewpager.getCurrentItem() == (mCount + 1)){//到尾了
-                Log.i("anan", mViewpager.getCurrentItem() + "...2");
-                mViewpager.setCurrentItem(1, false);
-            }
+        public void onPageScrollStateChanged(int state) {//0:结束滑动, 1:开始滑动, 2:松手
+
+//该种方式可能会出现问题（占用过多主线程时间）
+//            if (state != 0) return;//当state为0时说明已经结束滑动
+//            long l=new Date().getTime();
+//            Log.i("anan", mViewpager.getCurrentItem() + " ...0");
+//            if (mViewpager.getCurrentItem() == 0){//到头了
+//                Log.i("anan", mViewpager.getCurrentItem() + "...1");
+//                mViewpager.setCurrentItem(mCount, false);
+//                Log.i("anan2",""+(new Date().getTime() - l));
+//            }else if (mViewpager.getCurrentItem() == (mCount + 1)){//到尾了
+//                Log.i("anan", mViewpager.getCurrentItem() + "...2");
+//                mViewpager.setCurrentItem(1, false);
+//                Log.i("anan2",""+(new Date().getTime() - l));
+//            }
         }
     }
 

@@ -34,4 +34,8 @@ dependencies {
     compile ('com.alibaba.android:vlayout:1.0.4@aar') {
         transitive = true
     }
+    //黄油刀 View注入式框架
+    compile 'com.jakewharton:butterknife:8.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+
 }

@@ -20,7 +20,8 @@
         <activity android:name=".widget.recyclerview.RecyclerviewActivity" />
         <activity android:name=".widget.vlayout.VLayoutActivity" />
         <activity android:name=".widget.vlayout.TmallIndexActivity" />
-        <activity android:name=".framework.view.ButterknifeActivity"></activity>
+        <activity android:name=".framework.view.ButterknifeActivity" />
+        <activity android:name=".uitls.socketMulticast.MulticastActivity"></activity>
     </application>
 
 </manifest>

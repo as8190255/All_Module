@@ -1,5 +1,6 @@
 package org.jc.allmoduledemo.framework.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -36,7 +37,7 @@ public class ButterknifeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tv_text.setText("啊飒飒");
         btn.setText("点我");
-        listview.setAdapter(new DataAdapter());
+        listview.setAdapter(new DataAdapter(this));
     }
 
     @SuppressWarnings("unused")
@@ -45,6 +46,11 @@ public class ButterknifeActivity extends AppCompatActivity {
     }
 
     private class DataAdapter extends BaseAdapter{
+        Context mContext;
+
+        public DataAdapter(Context mContext) {
+            this.mContext = mContext;
+        }
 
         @Override
         public int getCount() {
@@ -63,7 +69,9 @@ public class ButterknifeActivity extends AppCompatActivity {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            return null;
+            TextView textView = new TextView(mContext);
+            textView.setText(i + " 11");
+            return textView;
         }
 
 

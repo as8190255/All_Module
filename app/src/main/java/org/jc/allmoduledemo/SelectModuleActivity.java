@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.jc.allmoduledemo.framework.view.ButterknifeActivity;
 import org.jc.allmoduledemo.uitls.socketMulticast.MulticastActivity;
+import org.jc.allmoduledemo.uitls.socketMulticast.MulticastSearchActivity;
 import org.jc.allmoduledemo.widget.recyclerview.RecyclerviewActivity;
 import org.jc.allmoduledemo.widget.vlayout.TmallIndexActivity;
 import org.jc.allmoduledemo.widget.vlayout.VLayoutActivity;
@@ -43,6 +44,7 @@ public class SelectModuleActivity extends AppCompatActivity {
         data.put(TmallIndexActivity.class.getSimpleName(), TmallIndexActivity.class);
         data.put(ButterknifeActivity.class.getSimpleName(), ButterknifeActivity.class);
         data.put(MulticastActivity.class.getSimpleName(), MulticastActivity.class);
+        data.put(MulticastSearchActivity.class.getSimpleName(), MulticastSearchActivity.class);
 
 
         lv_activity.setAdapter(new ActiveAdapter(this, data));

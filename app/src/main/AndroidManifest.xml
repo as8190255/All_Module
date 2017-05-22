@@ -10,18 +10,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SelectModuleActivity">
+        <activity android:name=".SelectModuleActivity" android:label="选择模块">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".widget.recyclerview.RecyclerviewActivity" />
-        <activity android:name=".widget.vlayout.VLayoutActivity" />
-        <activity android:name=".widget.vlayout.TmallIndexActivity" />
-        <activity android:name=".framework.view.ButterknifeActivity" />
-        <activity android:name=".uitls.socketMulticast.MulticastActivity"></activity>
+        <activity android:name=".widget.recyclerview.RecyclerviewActivity" android:label="RecyclerView基本用法"/>
+        <activity android:name=".widget.vlayout.VLayoutActivity" android:label="Vlayout基本用法"/>
+        <activity android:name=".widget.vlayout.TmallIndexActivity" android:label="自实现Vlayout电商首页"/>
+        <activity android:name=".framework.view.ButterknifeActivity" android:label="黄油刀"/>
+        <activity android:name=".uitls.socketMulticast.MulticastActivity" android:label="Socket广播消息发送"/>
+        <activity android:name=".uitls.socketMulticast.MulticastSearchActivity" android:label="Socket广播消息接受"/>
     </application>
 
 </manifest>
